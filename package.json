@@ -1,0 +1,27 @@
+{
+  "name": "bbs-api",
+  "version": "1.0.0",
+  "description": "API for bbs page",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hoangtranson/bbs-api.git"
+  },
+  "keywords": [
+    "nodejs",
+    "expressjs"
+  ],
+  "author": "Hayden.tran.d@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hoangtranson/bbs-api/issues"
+  },
+  "homepage": "https://github.com/hoangtranson/bbs-api#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "gulp": "^3.9.1"
+  }
+}
