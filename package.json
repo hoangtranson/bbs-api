@@ -22,7 +22,8 @@
   "homepage": "https://github.com/hoangtranson/bbs-api#readme",
   "dependencies": {
     "express": "^4.16.3",
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
+    "mongoose": "^5.2.9"
   },
   "devDependencies": {
     "gulp-nodemon": "^2.2.1"
