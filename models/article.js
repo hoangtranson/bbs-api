@@ -16,7 +16,8 @@ const articleModel =  new Schema({
         default: Date.now
     },
     viewCount: {
-        type: Number
+        type: Number,
+        default: 0
     },
     content: {
         type: String
