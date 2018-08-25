@@ -54,6 +54,14 @@ const routes = function(articleModel){
             res.json(req.article);
           }
         })
+    }).delete( (req, res) => {
+      req.article.remove( err => {
+        if(err){
+          res.status(500).send(err);
+        } else {
+          res.status(204).send('Removed!!!!');
+        }
+      })
     });
     
     articleRouter.route("/article").post((req, res) => {
