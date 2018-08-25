@@ -38,6 +38,22 @@ const routes = function(articleModel){
       req.article.content = req.body.content;
       req.article.save();
       res.json(req.article);
+    }).patch((req, res) => {
+        if(req.body._id){
+          delete req.body._id;
+        }
+
+        for(let p in req.body){
+          req.article[p] = req.body[p];
+        }
+
+        req.article.save( err => {
+          if(err){
+            res.status(500).send(err);
+          } else {
+            res.json(req.article);
+          }
+        })
     });
     
     articleRouter.route("/article").post((req, res) => {
