@@ -13,12 +13,28 @@ const routes = function(articleModel){
       });
     });
     
-    articleRouter.route("/article/:id").get((req, res) => {
+    articleRouter.route("/article/:id")
+    .get((req, res) => {
       articleModel.findById(req.params.id, (err, articles) => {
         if (err) {
           console.log(err);
         } else {
           res.json(articles);
+        }
+      });
+    })
+    .put( (req, res) => {
+      articleModel.findById(req.params.id, (err, article) => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          article.title = req.body.title;
+          article.author = req.body.author;
+          article.email = req.body.email;
+          article.viewCount = req.body.viewCount;
+          article.content = req.body.content;
+          article.save();
+          res.json(article);
         }
       });
     });
