@@ -13,30 +13,31 @@ const routes = function(articleModel){
       });
     });
     
-    articleRouter.route("/article/:id")
-    .get((req, res) => {
-      articleModel.findById(req.params.id, (err, articles) => {
-        if (err) {
-          console.log(err);
-        } else {
-          res.json(articles);
-        }
-      });
-    })
-    .put( (req, res) => {
+    articleRouter.use("/article/:id", (req,res,next) => {
       articleModel.findById(req.params.id, (err, article) => {
         if (err) {
           res.status(500).send(err);
+        } else if(article){
+          req.article = article;
+          next();
         } else {
-          article.title = req.body.title;
-          article.author = req.body.author;
-          article.email = req.body.email;
-          article.viewCount = req.body.viewCount;
-          article.content = req.body.content;
-          article.save();
-          res.json(article);
+          res.status(404).send('article not found');
         }
       });
+    });
+
+    articleRouter.route("/article/:id")
+    .get((req, res) => {
+      res.json(req.article);
+    })
+    .put( (req, res) => {
+      req.article.title = req.body.title;
+      req.article.author = req.body.author;
+      req.article.email = req.body.email;
+      req.article.viewCount = req.body.viewCount;
+      req.article.content = req.body.content;
+      req.article.save();
+      res.json(req.article);
     });
     
     articleRouter.route("/article").post((req, res) => {
