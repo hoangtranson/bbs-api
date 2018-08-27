@@ -1,19 +1,40 @@
+const paginate = require('express-paginate');
+
 const articleController = articleModel => {
-    const get = (req, res) => {
-        articleModel.find((err, articles) => {
-            if (err) {
-                console.log(err);
-            } else {
-                const articleList = [];
-                articles.forEach(element => {
-                    const item = element.toJSON();
-                    item.links = {};
-                    item.links.self = `http://${req.headers.host}/api/article/${element._id}`;
-                    articleList.push(item);
-                });
-                res.json(articleList);
-            }
-        });
+    const get = async (req, res, next) => {
+        try {
+            const [results, itemCount] = await Promise.all([
+                articleModel.find({}).limit(req.query.limit).skip(req.skip).lean().exec(),
+                articleModel.count({})
+            ]);
+
+            const pageCount = Math.ceil(itemCount / req.query.limit);
+            res.json({
+                object: 'list',
+                has_more: paginate.hasNextPages(req)(pageCount),
+                pageCount,
+                data: results
+            });
+            // if (req.accepts('json')) {
+            //     // inspired by Stripe's API response for list objects
+            //     res.json({
+            //         object: 'list',
+            //         has_more: paginate.hasNextPages(req)(pageCount),
+            //         pageCount,
+            //         data: results
+            //     });
+            // } else {
+            //     res.render('articles', {
+            //         articles: results,
+            //         pageCount,
+            //         itemCount,
+            //         pages: paginate.getArrayPages(req)(3, pageCount, req.query.page)
+            //     });
+            // }
+
+        } catch (e) {
+            next(e);
+        }
     }
 
     const getOne = (req, res) => {
@@ -22,8 +43,8 @@ const articleController = articleModel => {
 
     const post = (req, res) => {
         const newArticle = new articleModel(req.body);
-        
-        if(!req.body.title){
+
+        if (!req.body.title) {
             res.status(400);
             res.send('Title is required');
         } else {

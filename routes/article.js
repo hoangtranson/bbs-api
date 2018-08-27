@@ -1,11 +1,14 @@
 const express = require("express");
+const paginate = require('express-paginate');
 
 const routes = function(articleModel){
     const articleRouter = express.Router();
 
     const articleController = require('../controllers/article')(articleModel);
 
+    articleRouter.use("/articles", paginate.middleware(10, 50));
     articleRouter.route("/articles").get(articleController.get);
+
     articleRouter.route("/article").post(articleController.post);
 
     articleRouter.use("/article/:id", (req,res,next) => {
