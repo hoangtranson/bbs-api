@@ -4,7 +4,14 @@ const articleController = articleModel => {
             if (err) {
                 console.log(err);
             } else {
-                res.json(articles);
+                const articleList = [];
+                articles.forEach(element => {
+                    const item = element.toJSON();
+                    item.links = {};
+                    item.links.self = `http://${req.headers.host}/api/article/${element._id}`;
+                    articleList.push(item);
+                });
+                res.json(articleList);
             }
         });
     }
