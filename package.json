@@ -12,7 +12,10 @@
   },
   "keywords": [
     "nodejs",
-    "expressjs"
+    "expressjs",
+    "express-paginate",
+    "gulp",
+    "supertest"
   ],
   "author": "Hayden.tran.d@gmail.com",
   "license": "ISC",
