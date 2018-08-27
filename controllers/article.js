@@ -62,7 +62,7 @@ const articleController = articleModel => {
     }
 
     const remove = (req, res) => {
-        req.article.deleteOne(err => {
+        req.article.remove(err => {
             if (err) {
                 res.status(500).send(err);
             } else {
