@@ -14,15 +14,16 @@ const articleController = articleModel => {
     }
 
     const post = (req, res) => {
-        try {
-            req.body = JSON.parse(Object.keys(req.body)[0]);
-        } catch (err) {
-            req.body = req.body;
-        }
-
         const newArticle = new articleModel(req.body);
-        newArticle.save();
-        res.status(201).send(newArticle);
+        
+        if(!req.body.title){
+            res.status(400);
+            res.send('Title is required');
+        } else {
+            newArticle.save();
+            res.status(201);
+            res.send(newArticle);
+        }
     }
 
     const put = (req, res) => {
