@@ -10,7 +10,6 @@ const articleController = articleModel => {
 
             const pageCount = Math.ceil(itemCount / req.query.limit);
             res.json({
-                object: 'list',
                 has_more: paginate.hasNextPages(req)(pageCount),
                 pageCount,
                 data: results
