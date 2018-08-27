@@ -30,8 +30,6 @@ const routes = function(articleModel){
     .patch(articleController.patch)
     .delete(articleController.remove);
     
-   
-
     return articleRouter;
 };
 
