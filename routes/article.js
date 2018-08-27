@@ -3,16 +3,11 @@ const express = require("express");
 const routes = function(articleModel){
     const articleRouter = express.Router();
 
-    articleRouter.route("/articles").get((req, res) => {
-      articleModel.find((err, articles) => {
-        if (err) {
-          console.log(err);
-        } else {
-          res.json(articles);
-        }
-      });
-    });
-    
+    const articleController = require('../controllers/article')(articleModel);
+
+    articleRouter.route("/articles").get(articleController.get);
+    articleRouter.route("/article").post(articleController.post);
+
     articleRouter.use("/article/:id", (req,res,next) => {
       articleModel.findById(req.params.id, (err, article) => {
         if (err) {
@@ -27,54 +22,12 @@ const routes = function(articleModel){
     });
 
     articleRouter.route("/article/:id")
-    .get((req, res) => {
-      res.json(req.article);
-    })
-    .put( (req, res) => {
-      req.article.title = req.body.title;
-      req.article.author = req.body.author;
-      req.article.email = req.body.email;
-      req.article.viewCount = req.body.viewCount;
-      req.article.content = req.body.content;
-      req.article.save();
-      res.json(req.article);
-    }).patch((req, res) => {
-        if(req.body._id){
-          delete req.body._id;
-        }
-
-        for(let p in req.body){
-          req.article[p] = req.body[p];
-        }
-
-        req.article.save( err => {
-          if(err){
-            res.status(500).send(err);
-          } else {
-            res.json(req.article);
-          }
-        })
-    }).delete( (req, res) => {
-      req.article.remove( err => {
-        if(err){
-          res.status(500).send(err);
-        } else {
-          res.status(204).send('Removed!!!!');
-        }
-      })
-    });
+    .get(articleController.getOne)
+    .put(articleController.put)
+    .patch(articleController.patch)
+    .delete(articleController.remove);
     
-    articleRouter.route("/article").post((req, res) => {
-      try {
-        req.body = JSON.parse(Object.keys(req.body)[0]);
-      } catch (err) {
-        req.body = req.body;
-      }
-    
-      const newArticle = new articleModel(req.body);
-      newArticle.save();
-      res.status(201).send(newArticle);
-    });
+   
 
     return articleRouter;
 };
